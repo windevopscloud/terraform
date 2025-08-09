@@ -7,7 +7,7 @@ terraform {
   backend "s3" {
     bucket         = "terraform-github-windevopscloud-poc-bucket"     # Update it 
     key            = "poc/terraform-github-windevopscloud-poc.tfstate" # Update it
-    region         = "eu-west-1"                            # Update it
+    region         = "us-east-1"                            # Update it
     dynamodb_table = "terraform-github-windevopscloud-poc-lock"                       # Update it
     encrypt        = true
   }
