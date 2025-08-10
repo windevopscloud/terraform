@@ -1,9 +1,8 @@
 name: Deploy Terraform
 
 on:
-  pull_request:
-    branches:
-      - main
+  pull_request_review:
+    types: [submitted]
   push:
     branches:
       - main
@@ -11,6 +10,7 @@ on:
 jobs:
   terraform:
     name: Deploy Terraform Job
+    if: github.event_name != 'pull_request_review' || github.event.review.state == 'approved'
     runs-on: ubuntu-latest
 
     steps:
