@@ -28,7 +28,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "eu-west-1"
+          aws-region: "eu-east-1"
       
       - name: Verify AWS CLI
         run: aws sts get-caller-identity
@@ -70,7 +70,7 @@ jobs:
       # - name: Terraform Destroy
       #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       #   run: terraform destroy -auto-approve
-      
+
       # Execute the terraform plan
       #- name: Terraform Plan
       #  run: terraform plan
