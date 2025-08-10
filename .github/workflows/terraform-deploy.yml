@@ -90,7 +90,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform plan -auto-approve
+        run: terraform apply -auto-approve
 
       # This step runs terraform plan on pull requests
       #- name: Terraform Plan
