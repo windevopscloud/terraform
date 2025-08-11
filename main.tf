@@ -15,10 +15,10 @@ terraform {
 # Customize with your own S3 bucket and DynamoDB table for managing Remote Backend State
 terraform {
   backend "s3" {
-    bucket         = "windevopscloud-terraform-poc-bucket"  # Update it 
-    key            = "windevopscloud-terraform-poc.tfstate" # Update it
+    bucket         = "windevopscloud-terraform-bucket"  # Update it 
+    key            = "windevopscloud-terraform.tfstate" # Update it
     region         = "us-east-1"                            # Update it
-    dynamodb_table = "windevopscloud-terraform-poc-lock"    # Update it
+    dynamodb_table = "windevopscloud-terraform-lock"    # Update it
     encrypt        = true
   }
 }
