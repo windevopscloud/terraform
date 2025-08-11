@@ -12,7 +12,7 @@ terraform {
   required_version = ">= 1.0.0"
 }
 
-# Customize with your own S3 bucket and DynamoDB table for Remote Backend State
+# Customize with your own S3 bucket and DynamoDB table for managing Remote Backend State
 terraform {
   backend "s3" {
     bucket         = "windevopscloud-terraform-poc-bucket"  # Update it 
