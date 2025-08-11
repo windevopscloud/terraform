@@ -57,7 +57,7 @@ jobs:
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          directory: ${{ env.target_folder }}
+          working_directory: ${{ env.target_folder }}
 
       # Initialize terraform
       - name: Initialize Terraform
