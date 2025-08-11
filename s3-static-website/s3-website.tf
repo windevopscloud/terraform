@@ -1,7 +1,6 @@
 #tfsec:ignore:aws-s3-enable-bucket-logging
 resource "aws_s3_bucket" "static_website" {
   bucket = "windevopscloud-s3-website"
-  acl    = "public-read"
 
   website {
     index_document = "index.html"
@@ -57,5 +56,4 @@ resource "aws_s3_bucket_object" "website_files" {
   bucket = aws_s3_bucket.static_website.bucket
   key    = each.value
   source = "s3-website/${each.value}"
-  #acl    = "public-read"
 }
