@@ -1,15 +1,16 @@
 name: Deploy Terraform
 
 on:
-  workflow_dispatch:
-    inputs:
-      target_folder:
-        description: "Select Terraform folder to run"
-        required: true
-        default: "test"
-        type: choice
-        options:
-          - s3-static-website
+  #workflow_dispatch:
+  #  inputs:
+  #    target_folder:
+  #      description: "Select Terraform folder to run"
+  #      required: true
+  #      default: "test"
+  #      type: choice
+  #      options:
+  #        - test
+  #        - s3-static-website
 
   pull_request_review:
     types: [submitted]
@@ -49,27 +50,27 @@ jobs:
         uses: terraform-linters/setup-tflint@v1
 
       - name: Run TFLint
-        run: tflint ${{ github.event.inputs.target_folder }}
+        run: tflint ${{ env.target_folder }}
 
       # Run tfsec using official action
       - name: Run tfsec Scan
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          directory: ${{ github.event.inputs.target_folder }}
+          directory: ${{ env.target_folder }}
 
       # Initialize terraform
       - name: Initialize Terraform
-        run: terraform -chdir=${{ github.event.inputs.target_folder }} init -backend-config=../backend.tf
+        run: terraform -chdir=${{ env.target_folder }} init -backend-config=../backend.tf
 
       - name: Terraform Format Check
-        run: terraform -chdir=${{ github.event.inputs.target_folder }} fmt -check
+        run: terraform -chdir=${{ env.target_folder }} fmt -check
 
       - name: Terraform Validate
-        run: terraform -chdir=${{ github.event.inputs.target_folder }} validate
+        run: terraform -chdir=${{ env.target_folder }} validate
 
       - name: Terraform Plan
-        run: terraform -chdir=${{ github.event.inputs.target_folder }} plan
+        run: terraform -chdir=${{ env.target_folder }} plan
 
   terraform_apply:
     name: Apply Terraform Job
@@ -98,7 +99,7 @@ jobs:
 
       # Initialize terraform
       - name: Initialize Terraform
-        run: terraform -chdir=${{ github.event.inputs.target_folder }} init
+        run: terraform -chdir=${{ env.target_folder }} init
 
       - name: Terraform Apply
-        run: terraform -chdir=${{ github.event.inputs.target_folder }} apply -auto-approve
+        run: terraform -chdir=${{ env.target_folder }} apply -auto-approve
