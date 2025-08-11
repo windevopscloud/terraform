@@ -11,6 +11,15 @@ resource "aws_s3_bucket" "static_website" {
     enabled = true
   }
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "aws:kms"
+        kms_master_key_id = aws_kms_key.s3_key.arn
+      }
+    }
+  }
+
   tags = {
     Name        = "Static Website"
     Environment = "var.environment"
@@ -20,10 +29,10 @@ resource "aws_s3_bucket" "static_website" {
 resource "aws_s3_bucket_public_access_block" "block" {
   bucket = aws_s3_bucket.static_website.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket_policy" "policy" {
@@ -32,7 +41,7 @@ resource "aws_s3_bucket_policy" "policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Sid       = "PublicReadGetObject"
+      Sid       = "AllowPublicRead"
       Effect    = "Allow"
       Principal = "*"
       Action    = ["s3:GetObject"]
@@ -47,5 +56,5 @@ resource "aws_s3_bucket_object" "website_files" {
   bucket = aws_s3_bucket.static_website.bucket
   key    = each.value
   source = "s3-website/${each.value}"
-  acl    = "public-read"
+  #acl    = "public-read"
 }
