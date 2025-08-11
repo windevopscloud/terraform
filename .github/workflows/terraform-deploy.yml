@@ -1,6 +1,16 @@
 name: Deploy Terraform
 
 on:
+  workflow_dispatch:
+    inputs:
+      target_folder:
+        description: "Select Terraform folder to run"
+        required: true
+        default: "test"
+        type: choice
+        options:
+          - s3-static-website
+
   pull_request_review:
     types: [submitted]
   push:
@@ -39,26 +49,27 @@ jobs:
         uses: terraform-linters/setup-tflint@v1
 
       - name: Run TFLint
-        run: tflint
+        run: tflint ${{ github.event.inputs.target_folder }}
 
       # Run tfsec using official action
       - name: Run tfsec Scan
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: ${{ github.event.inputs.target_folder }}
 
       # Initialize terraform
       - name: Initialize Terraform
-        run: terraform init
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} init -backend-config=../backend.tf
 
       - name: Terraform Format Check
-        run: terraform fmt -check
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} fmt -check
 
       - name: Terraform Validate
-        run: terraform validate
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} plan
 
   terraform_apply:
     name: Apply Terraform Job
@@ -87,34 +98,7 @@ jobs:
 
       # Initialize terraform
       - name: Initialize Terraform
-        run: terraform init
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
-
-      # This step runs terraform plan on pull requests
-      #- name: Terraform Plan
-      #  if: github.event_name == 'pull_request'
-      #  run: terraform plan
-
-      # These steps run on push to main branch (merge)
-      #- name: Terraform Apply
-      #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #  run: terraform apply -auto-approve
-      
-      # Uncomment this to destroy terraform resources on push to main branch (use with caution!)
-      # - name: Terraform Destroy
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   run: terraform destroy -auto-approve
-
-      # Execute the terraform plan
-      #- name: Terraform Plan
-      #  run: terraform plan
-
-      # Deploy terraform changes
-      #- name: Terraform Apply
-      #  run: terraform apply -auto-approve
-
-      # Destroy terraform resources (uncomment lines below)
-      # - name: Terraform Destroy
-      #   run: terraform destroy -auto-approve
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} apply -auto-approve
