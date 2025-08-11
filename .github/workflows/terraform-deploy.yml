@@ -61,7 +61,7 @@ jobs:
 
       # Initialize terraform
       - name: Initialize Terraform
-        run: terraform -chdir=${{ env.target_folder }} init -backend-config=../backend.tf
+        run: terraform -chdir=${{ env.target_folder }} init
 
       - name: Terraform Format Check
         run: terraform -chdir=${{ env.target_folder }} fmt -check
