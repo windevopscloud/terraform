@@ -50,7 +50,7 @@ jobs:
         uses: terraform-linters/setup-tflint@v1
 
       - name: Run TFLint
-        run: tflint ${{ vars.target_folder }}
+        run: tflint --chdir=${{ vars.target_folder }}
 
       # Run tfsec using official action
       - name: Run tfsec Scan
