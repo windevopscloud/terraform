@@ -1,4 +1,3 @@
-#tfsec:ignore:aws-kms-auto-rotate-keys
 #tfsec:ignore:aws-s3-enable-bucket-logging
 resource "aws_s3_bucket" "static_website" {
   bucket = "windevopscloud-s3-website"
