@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "static_website" {
 
   tags = {
     Name        = "Static Website"
-    Environment = "var.environment"
+    Environment = var.environment
   }
 }
 
