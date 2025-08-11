@@ -17,7 +17,7 @@ terraform {
   backend "s3" {
     bucket         = "windevopscloud-terraform-bucket"  # Update it 
     key            = "windevopscloud-terraform.tfstate" # Update it
-    region         = "us-east-1"                            # Update it
+    region         = "us-east-1"                        # Update it
     dynamodb_table = "windevopscloud-terraform-lock"    # Update it
     encrypt        = true
   }
