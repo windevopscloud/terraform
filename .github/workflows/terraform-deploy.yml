@@ -1,16 +1,17 @@
 name: Deploy Terraform
 
 on:
-  #workflow_dispatch:
-  #  inputs:
-  #    target_folder:
-  #      description: "Select Terraform folder to run"
-  #      required: true
-  #      default: "test"
-  #      type: choice
-  #      options:
-  #        - test
-  #        - s3-static-website
+  workflow_dispatch:
+    inputs:
+      target_folder:
+        description: "Select the Terraform folder to run IaC"
+        required: true
+        default: 'test'
+        type: choice
+        options:
+          - test
+          - s3-static-website
+          - 2tier-architecture
 
   pull_request_review:
     types: [submitted]
