@@ -1,7 +1,7 @@
 #tfsec:ignore:aws-s3-enable-bucket-logging
 #tfsec:ignore:aws-s3-encryption-customer-key
 resource "aws_s3_bucket" "static_website" {
-  bucket = "windevopscloud-s3-website"
+  bucket = var.s3_website
 
   website {
     index_document = "index.html"
