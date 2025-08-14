@@ -1,5 +1,15 @@
 variable "environment" {
-  description = "Deployment environment"
+  description = "POC environment"
   type        = string
-  default     = "Production" # optional default value
+  default     = "poc" # optional default value
+}
+
+variable "aws_region" {
+  type    = string
+  default = "us-east-1"
+}
+
+variable "s3_website" {
+  type    = string
+  default = "windevopscloud-s3-website"
 }
