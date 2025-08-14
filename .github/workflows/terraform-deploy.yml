@@ -51,27 +51,27 @@ jobs:
         uses: terraform-linters/setup-tflint@v1
 
       - name: Run TFLint
-        run: tflint --chdir=${{ vars.target_folder }}
+        run: tflint --chdir=${{ github.event.inputs.target_folder }}
 
       # Run tfsec using official action
       - name: Run tfsec Scan
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          working_directory: ${{ vars.target_folder }}
+          working_directory: ${{ github.event.inputs.target_folder }}
 
       # Initialize terraform
       - name: Initialize Terraform
-        run: terraform -chdir=${{ vars.target_folder }} init
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} init
 
       - name: Terraform Format Check
-        run: terraform -chdir=${{ vars.target_folder }} fmt -check
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} fmt -check
 
       - name: Terraform Validate
-        run: terraform -chdir=${{ vars.target_folder }} validate
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} validate
 
       - name: Terraform Plan
-        run: terraform -chdir=${{ vars.target_folder }} plan
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} plan -refresh=true -input=false -out=tfplan
 
   terraform_apply:
     name: Apply Terraform Job
@@ -99,8 +99,5 @@ jobs:
         run: aws sts get-caller-identity
 
       # Initialize terraform
-      - name: Initialize Terraform
-        run: terraform -chdir=${{ vars.target_folder }} init
-
       - name: Terraform Apply
-        run: terraform -chdir=${{ vars.target_folder }} apply -auto-approve
+        run: terraform -chdir=${{ github.event.inputs.target_folder }} apply -auto-approve tfplan
